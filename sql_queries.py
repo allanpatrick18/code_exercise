@@ -36,7 +36,7 @@ outcome VARCHAR(25),
 price DECIMAL,
 event_id int 
 constraint selection_event_id_fk
-        references event
+        references events
 );"""
 
 insert_table_sports = """

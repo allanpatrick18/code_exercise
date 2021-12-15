@@ -43,4 +43,6 @@ def get_all_objects(table_name):
 def get_objects_by_id(table_name, item_id):
     stm = select_by_id.format(table_name=table_name, id=item_id)
     res = execute_query_object(stm)
-    return res[0]
+    if res:
+        return res[0]
+    return res
