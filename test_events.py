@@ -9,22 +9,28 @@ def test_read_event():
     assert response.status_code == 200
 
 
-def test_read_event_all():
-    response = client.get("/events/")
+def test_create_event():
+    response = client.post("/events/",
+                          json={"name": "string",
+                                  "slug": "string",
+                                  "active": True,
+                                  "sport_id": 1,
+                                  "status": "Preplay"})
     assert response.status_code == 200
 
 
 def test_update_event():
     response = client.put("/events/1",
-                          json={"name": "Foo",
-                                        "active": True,
-                                        "slug": "foot"})
+                          json={"name": "Events edit",
+                                  "slug": "string",
+                                  "active": True,
+                                  "sport_id": 1,
+                                  "status": "Inplay"})
     assert response.status_code == 200
 
 
-def test_create_event():
-    response = client.post("/events",
-                          json={"name": "Foo",
-                                        "active": True,
-                                        "slug": "foot"})
+def test_read_event_all():
+    response = client.get("/events/")
     assert response.status_code == 200
+
+

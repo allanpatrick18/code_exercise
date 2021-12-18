@@ -29,8 +29,15 @@ def test_update_sport():
 
 
 def test_create_sport():
-    response = client.post("/sports",
+    response = client.post("/sports/",
                           json={"name": "Foo",
-                                        "active": True,
-                                        "slug": "foot"})
+                                        "active": True})
+    assert response.status_code == 200
+
+
+def test_create_event():
+    response = client.post("/sports/",
+                          json={"name": "Foo",
+                                "active": True,
+                                "slug": "foot"})
     assert response.status_code == 200
