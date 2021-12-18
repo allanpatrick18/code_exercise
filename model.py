@@ -1,7 +1,9 @@
 from pydantic import BaseModel
+from typing import Optional
 from datetime import datetime, time, timedelta
 
 from enum import Enum
+
 
 
 class SelectionStatus(str, Enum):
@@ -22,7 +24,7 @@ class OutcomeType(str, Enum):
 
 class Sport(BaseModel):
     name: str
-    slug: str
+    slug: Optional[str]
     active: bool
 
 
@@ -30,21 +32,28 @@ class Event(BaseModel):
     name: str
     slug: str
     active: bool
-    sport_id: Sport
+    sport_id: int
     status: EventType
-    scheduled_start: datetime
-    actual_start: datetime
+
+    class Config:
+        use_enum_values = True
+
+
+class EventIn(Event):
+    scheduled_start: Optional[datetime]
+    actual_start: Optional[datetime]
 
 
 class Selection(BaseModel):
     name: str
     slug: str
     active: bool
-    sport_id: Sport
+    event_id: int
     status: SelectionStatus
-    scheduled_start: datetime
-    actual_start: datetime
     price: float
     outcome: OutcomeType
+
+    class Config:
+        use_enum_values = True
 
 

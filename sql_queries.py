@@ -40,8 +40,20 @@ constraint selection_event_id_fk
 );"""
 
 insert_table_sports = """
-insert into sports (name, slug, active)
-values ('{name}', '{slug}', '{active}');
+insert into {} {}
+values {} RETURNING *;
+"""
+
+# insert_table_sports = """
+# insert into sports (name, slug, active)
+# values ('{name}', '{slug}', {active}) RETURNING *;
+# """
+
+
+
+insert_table_events = """
+insert into events (id, name, slug, sport_id, active, status, scheduled_start, actual_start)
+values ({id},'{name}','{slug}','{sport_id}',{active},'{status}','{scheduled_start} ','{actual_start}');
 """
 
 update_table_sports = """
@@ -49,7 +61,8 @@ UPDATE sports
 SET name = '{name}',
     slug= '{slug}',
     active = '{active}'
-WHERE id = {id};
+WHERE id = {id}
+RETURNING *;
 """
 
 select_all = """SELECT * FROM {table_name}"""
