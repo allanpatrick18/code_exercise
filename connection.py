@@ -12,4 +12,4 @@ def return_db_connection():
     conn = psycopg2.connect(params, cursor_factory=RealDictCursor)
     cur = conn.cursor()
     conn.autocommit = True
-    return cur, conn
+    return cur

@@ -5,7 +5,6 @@ from datetime import datetime, time, timedelta
 from enum import Enum
 
 
-
 class SelectionStatus(str, Enum):
     STARTED = "Started"
     ENDED = "Ended"
@@ -22,13 +21,13 @@ class OutcomeType(str, Enum):
     LOSE = "Lose"
 
 
-class Sport(BaseModel):
+class Sports(BaseModel):
     name: str
     slug: Optional[str]
     active: bool
 
 
-class Event(BaseModel):
+class Events(BaseModel):
     name: str
     slug: str
     active: bool
@@ -39,12 +38,12 @@ class Event(BaseModel):
         use_enum_values = True
 
 
-class EventIn(Event):
+class EventsIn(Events):
     scheduled_start: Optional[datetime]
     actual_start: Optional[datetime]
 
 
-class Selection(BaseModel):
+class Selections(BaseModel):
     name: str
     slug: str
     active: bool

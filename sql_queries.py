@@ -19,7 +19,7 @@ id SERIAL PRIMARY KEY,
 name VARCHAR (255),
 slug VARCHAR (255),
 sport_id int constraint event_sports_id_fk references sports,
-active boolean,
+active BOOLEAN,
 status VARCHAR(25),
 scheduled_start timestamp without time zone,
 actual_start timestamp
@@ -32,38 +32,24 @@ id SERIAL PRIMARY KEY,
 slug VARCHAR(255),
 name VARCHAR(255),
 active BOOLEAN,
+status VARCHAR(25),
 outcome VARCHAR(25),
 price DECIMAL,
-event_id int 
+event_id INT 
 constraint selection_event_id_fk
         references events
 );"""
 
-insert_table_sports = """
+insert_table = """
 insert into {} {}
 values {} RETURNING *;
 """
 
-# insert_table_sports = """
-# insert into sports (name, slug, active)
-# values ('{name}', '{slug}', {active}) RETURNING *;
-# """
-
-
-
-insert_table_events = """
-insert into events (id, name, slug, sport_id, active, status, scheduled_start, actual_start)
-values ({id},'{name}','{slug}','{sport_id}',{active},'{status}','{scheduled_start} ','{actual_start}');
-"""
-
-update_table_sports = """
-UPDATE sports
-SET name = '{name}',
-    slug= '{slug}',
-    active = '{active}'
-WHERE id = {id}
+update_table = """
+UPDATE {} SET ({}) = %s WHERE id = {}
 RETURNING *;
 """
+
 
 select_all = """SELECT * FROM {table_name}"""
 
