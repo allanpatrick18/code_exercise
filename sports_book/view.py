@@ -22,18 +22,24 @@ def generate_insert_sql(model):
     This function will generate insert sql
     statament based in the give model
     """
-    names = tuple(model.schema()['properties'].keys())
+    names = list(model.schema()['properties'].keys())
+    if 'id' in names:
+        names.remove('id')
+    fields = tuple(names)
     string = tuple(['%s' for i in range(len(names))])
-    statement = insert_table.format(model.schema()['title'].lower(), names, string).replace("'", "")
-    values = tuple(model.dict().values())
+    statement = insert_table.format(model.schema()['title'].lower(), fields, string).replace("'", "")
+    values = tuple(model.dict(exclude={'id'}).values())
     return statement, values
 
 
 def generate_update_sql(model, id:int):
     """ This function will generate model"""
-    string = ', '.join(model.dict().keys())
+    names = list(model.schema()['properties'].keys())
+    if 'id' in names:
+        names.remove('id')
+    string = ', '.join(names)
     statement = update_table.format(model.schema()['title'].lower(), string, id).replace("'", "")
-    values = (tuple(model.dict().values()),)
+    values = (tuple(model.dict(exclude={'id'}).values()),)
     return statement, values
 
 
