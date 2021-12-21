@@ -4,6 +4,7 @@ from typing import List
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime
+from urllib.parse import unquote
 
 # from create_tables import main
 # main()
@@ -24,11 +25,16 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-
-
 @app.get("/")
 async def read_main():
     return {"msg": "Sever Up!"}
+
+
+@app.get("/regex/{expression}", response_model=Optional[dict])
+async def read_regex(expression: str):
+    expression = unquote(expression)
+    print(expression)
+    return get_regex(expression)
 
 
 @app.on_event("startup")

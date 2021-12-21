@@ -1,5 +1,6 @@
 from psycopg2 import sql
 from sql_queries import *
+from typing import Optional
 from connection import return_db_connection
 from model import Sports, EventsIn, Events, Selections
 
@@ -32,7 +33,7 @@ def generate_insert_sql(model):
     return statement, values
 
 
-def generate_update_sql(model, id:int):
+def generate_update_sql(model, id: int):
     """ This function will generate model"""
     names = list(model.schema()['properties'].keys())
     if 'id' in names:
@@ -73,16 +74,27 @@ def create_update_selection(event: Selections, id=None):
     return res_obj
 
 
-def get_all_objects(table_name):
+def get_all_objects(table_name: str) -> Optional[list]:
     stm = select_all.format(table_name=table_name)
     res = execute_query_object(stm)
     return res
 
 
-def get_objects_by_id(table_name, item_id):
+def get_objects_by_id(table_name: str, item_id: int) -> list:
     stm = select_by_id.format(table_name=table_name, id=item_id)
     print(stm)
     res = execute_query_object(stm)
     if res:
         return res[0]
     return res
+
+
+def get_regex(expression: str) -> dict:
+    tables = ['sports', 'events', 'selections']
+    result_dict = dict()
+    for table in tables:
+        stm = select_by_regex.format(table_name=table, expression=expression)
+        res = execute_query_object(stm)
+        result_dict[table] = res
+
+    return result_dict
