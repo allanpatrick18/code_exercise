@@ -82,7 +82,42 @@ select_all = """SELECT * FROM {table_name};"""
 select_by_id = """SELECT * FROM public.{table_name} WHERE id = {id};"""
 
 select_by_regex = """ SELECT * FROM {table_name} WHERE name ~ '{expression}';"""
-select_by_regex_1 = """ SELECT * FROM %s WHERE name ~ %s ;"""
+
+select_sport_by_threshold = """ 
+SELECT * FROM
+sports
+INNER JOIN(
+SELECT sport_id, count(*) as final FROM sports as s
+INNER JOIN events e on s.id = e.sport_id
+WHERE  e.active= TRUE
+GROUP BY sport_id
+HAVING count(*) > {threshold}
+ORDER BY final DESC) as res
+ON res.sport_id = id"""
+
+
+select_event_by_threshold = """ 
+SELECT * FROM
+events
+INNER JOIN(
+SELECT event_id, count(*) as actives
+FROM events as s
+INNER JOIN selections s2 on s.id = s2.event_id
+WHERE  s2.active= TRUE
+GROUP BY event_id
+HAVING count(*) > {threshold}
+ORDER BY actives DESC) as res
+ON res.event_id = id"""
+
+
+
+
+map_queries = {'sports':  {'regex': select_by_regex,
+                          'threshold': select_sport_by_threshold},
+            'events':  {'regex': select_by_regex,
+                       'threshold': select_event_by_threshold}
+
+}
 
 create_table_queries = [sports_table_create, event_table_create, selection_table_create, create_procedures,
                         create_triggers]
