@@ -1,3 +1,4 @@
+import logging
 from psycopg2 import sql
 from sql_queries import *
 from typing import Optional
@@ -6,13 +7,20 @@ from model import Sports, EventsIn, Events, Selections
 
 cur = return_db_connection()
 
+
+class FilterMissingError(Exception):
+    """Custom error that is raised param table doesn't
+      is missing."""
+    message: str = "The filter doesn't exits"
+
+
 def execute_query_object(sql_stmt):
     """This function execute the query statements"""
     cur = return_db_connection()
     cur.execute(sql_stmt)
     data_store = []
     for r in cur.fetchall():
-        print(dict(r))
+        # print(dict(r))
         data_store.append(dict(r))
     cur.close()
     return data_store
@@ -87,6 +95,36 @@ def get_objects_by_id(table_name: str, item_id: int) -> list:
     if res:
         return res[0]
     return res
+
+
+def get_regex_by_table(table: str, params: dict) -> dict:
+    result_dict = dict()
+    stm = None
+    filters = [f for f in list(params.keys())]
+    and_clause = []
+    try:
+        if 'regex' in filters:
+            and_clause.append("%s  ~ '%s'" % ('name', params['regex']))
+
+        if 'start_dt' and 'end_dt' in filters:
+            and_clause.append("%s BETWEEN '%s' AND '%s'" % ('scheduled_start', params['start_dt'], params['start_dt']))
+
+        and_clause_str = ' AND '.join(and_clause)
+        if 'threshold' in filters:
+            if table not in map_queries:
+                raise FilterMissingError
+
+            stm = map_queries[table]['threshold'].format(threshold=params['threshold'])
+            stm = f'{stm} WHERE ' + and_clause_str
+        else:
+            sql_query = f'SELECT * FROM {table} WHERE ' + and_clause_str
+            stm = sql_query
+    except FilterMissingError as e:
+        logging.info(msg=e.message)
+    if stm:
+        res = execute_query_object(stm)
+        result_dict[table] = res
+    return result_dict
 
 
 def get_regex(expression: str) -> dict:

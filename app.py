@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime
 from urllib.parse import unquote
-
+from fastapi import FastAPI, Request
 # from create_tables import main
 # main()
 
@@ -30,8 +30,16 @@ async def read_main():
     return {"msg": "Sever Up!"}
 
 
+
+@app.get("/filters/{table}")
+async def api_data(table: str, request: Request):
+    params = dict(request.query_params)
+    res = get_regex_by_table(table, params)
+    return res
+
+
 @app.get("/regex/{expression}", response_model=Optional[dict])
-async def read_regex(expression: str):
+async def read_regex(expression: str,  q: Optional[str]):
     expression = unquote(expression)
     print(expression)
     return get_regex(expression)
