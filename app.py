@@ -1,7 +1,5 @@
 import uvicorn
-from typing import Optional
 from typing import List
-from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime
 from urllib.parse import unquote
@@ -12,11 +10,6 @@ from fastapi import FastAPI, Request
 import model
 from sports_book.view import *
 import logging
-
-
-#APScheduler Related Libraries
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
 app = FastAPI()
 
@@ -43,34 +36,6 @@ async def read_regex(expression: str,  q: Optional[str]):
     expression = unquote(expression)
     print(expression)
     return get_regex(expression)
-
-
-@app.on_event("startup")
-async def load_schedule_or_create_blank():
-    """
-    Instatialise the Schedule Object as a Global Param and also load existing Schedules from Postgres
-    This allows for persistent schedules across server restarts.
-    """
-    global Schedule
-    try:
-        jobstores = {
-            'default': SQLAlchemyJobStore(url='postgresql://postgres:postgres@localhost:5432/sports_book')
-        }
-        Schedule = AsyncIOScheduler(jobstores=jobstores)
-        Schedule.start()
-        logger.info("Created Schedule Object")
-    except:
-        logger.error("Unable to Create Schedule Object")
-
-
-@app.on_event("shutdown")
-async def pickle_schedule():
-    """
-    An Attempt at Shutting down the schedule to avoid orphan jobs
-    """
-    global Schedule
-    Schedule.shutdown()
-    logger.info("Disabled Schedule")
 
 """
 Sports API
@@ -144,11 +109,6 @@ async def update_events(event_id: int, item: model.Events):
     update_item_encoded = jsonable_encoder(item)
     event = model.Events.parse_obj(update_item_encoded)
     event = create_update_event(event, event_id)
-    # end_date = event['scheduled_start']
-    # time_to_expiry = (end_date - datetime.now()).days
-    # schedule_check = Schedule.add_job(check_schedule_event, 'interval', seconds=time_to_expiry, id=event['id'],
-    #                                   args=[event])
-    # print(schedule_check)
     return event
 
 
@@ -157,12 +117,6 @@ async def create_events(item: model.Events):
     update_item_encoded = jsonable_encoder(item)
     event = model.Events.parse_obj(update_item_encoded)
     event = create_update_event(event)
-    end_date = event['scheduled_start']
-    index_job = str(event['id']) + '_' + event['name']
-    # time_to_expiry = (end_date - datetime.now()).days
-    # schedule_check = Schedule.add_job(check_schedule_event, 'interval', seconds=abs(time_to_expiry),
-    #                                   id=index_job, args=[event])
-    # print(schedule_check)
     return event
 
 
