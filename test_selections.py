@@ -14,7 +14,7 @@ def test_create_selection():
                           json={"name": "string",
                               "slug": "string",
                               "active": True,
-                              "event_id": 1,
+                              "event_id": 3,
                               "status": "Started",
                               "price": 0.1,
                               "outcome": "Win"})
@@ -26,7 +26,7 @@ def test_update_selection():
                           json={"name": "Selection Edited",
                               "slug": "Selection",
                               "active": True,
-                              "event_id": 1,
+                              "event_id": 3,
                               "status": "Started",
                               "price": 0.1,
                               "outcome": "Win"

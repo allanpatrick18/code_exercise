@@ -23,7 +23,7 @@ sport_id int constraint event_sports_id_fk references sports,
 status VARCHAR(25),
 active BOOLEAN NOT NULL,
 scheduled_start timestamp without time zone,
-actual_start timestamp
+actual_start timestamp without time zone
 );"""
 
 selection_table_create = """
@@ -81,7 +81,7 @@ select_all = """SELECT * FROM {table_name};"""
 
 select_by_id = """SELECT * FROM public.{table_name} WHERE id = {id};"""
 
-select_by_regex = """ SELECT * FROM {table_name} WHERE name ~ '{expression}';"""
+select_by_regex = """ SELECT * FROM {table_name} WHERE {field} ~ %s """
 
 select_sport_by_threshold = """ 
 SELECT * FROM

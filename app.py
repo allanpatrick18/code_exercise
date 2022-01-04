@@ -1,12 +1,7 @@
 import uvicorn
 from typing import List
 from fastapi.encoders import jsonable_encoder
-from datetime import datetime
-from urllib.parse import unquote
 from fastapi import FastAPI, Request
-# from create_tables import main
-# main()
-
 import model
 from sports_book.view import *
 import logging
@@ -31,11 +26,11 @@ async def api_data(table: str, request: Request):
     return res
 
 
-@app.get("/regex/{expression}", response_model=Optional[dict])
-async def read_regex(expression: str,  q: Optional[str]):
-    expression = unquote(expression)
-    print(expression)
-    return get_regex(expression)
+@app.get("/regex/{table}", response_model=Optional[dict])
+async def read_regex(table: str, request: Request):
+    params = dict(request.query_params)
+    res = get_regex(table, params)
+    return res
 
 """
 Sports API

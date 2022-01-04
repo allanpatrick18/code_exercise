@@ -11,6 +11,7 @@ def find_internal_nodes_num(tree: list) -> int:
     if len(tree) == 1:
         return 1
     tree.remove(-1)
+    # Time complexity is O(n)
     size = len(set(tree))
     return size
 
