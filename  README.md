@@ -1,5 +1,7 @@
 Application Overview
 
+export DB_HOST='localhost'
+
 Run internal nodes tests
 
     python -m unittest discover internal_nodes/

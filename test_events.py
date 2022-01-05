@@ -21,7 +21,7 @@ def test_create_event():
 
 
 def test_update_event():
-    response = client.put("/events/2",
+    response = client.put("/events/1",
                           json={"name": "Event Edited",
                                 "slug": "string",
                                 "active": True,

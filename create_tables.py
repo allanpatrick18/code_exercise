@@ -1,4 +1,5 @@
 import psycopg2
+import os
 from sql_queries import create_table_queries, drop_table_queries
 
 
@@ -9,11 +10,14 @@ def create_database():
     """
 
     # connect to default database
-    conn = psycopg2.connect("host=127.0.0.1 dbname=postgres user=postgres password=postgres")
+    DB_HOST = os.environ['DB_HOST']
+    params = "host={} dbname=postgres user=postgres password=postgres".format(DB_HOST)
+    conn = psycopg2.connect(params)
     conn.set_session(autocommit=True)
     cur = conn.cursor()
 
     # create sparkify database with UTF8 encoding
+    # cur.execute("REVOKE CONNECT ON DATABASE sports_book FROM public")
     cur.execute("DROP DATABASE IF EXISTS sports_book")
     cur.execute("CREATE DATABASE sports_book WITH ENCODING 'utf8' TEMPLATE template0")
 
@@ -21,7 +25,9 @@ def create_database():
     conn.close()
 
     # connect to sports_book database
-    conn = psycopg2.connect("host=localhost dbname=sports_book user=postgres password=postgres")
+    DB_HOST = os.environ['DB_HOST']
+    params = "host={} dbname=sports_book user=postgres password=postgres".format(DB_HOST)
+    conn = psycopg2.connect(params)
     cur = conn.cursor()
 
     return cur, conn

@@ -33,7 +33,6 @@ id SERIAL PRIMARY KEY,
 slug VARCHAR(255),
 name VARCHAR(255),
 active BOOLEAN NOT NULL,
-status VARCHAR(25),
 outcome VARCHAR(25),
 price DECIMAL,
 event_id INT 
@@ -121,4 +120,6 @@ map_queries = {'sports':  {'regex': select_by_regex,
 
 create_table_queries = [sports_table_create, event_table_create, selection_table_create, create_procedures,
                         create_triggers]
-drop_table_queries = [sport_table_drop, events_table_drop, selection_table_drop]
+# drop_table_queries = [sport_table_drop, events_table_drop, selection_table_drop]
+
+drop_table_queries = []

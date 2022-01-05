@@ -1,4 +1,6 @@
 import uvicorn
+from create_tables import main
+main()
 from typing import List
 from fastapi.encoders import jsonable_encoder
 from fastapi import FastAPI, Request

@@ -98,11 +98,11 @@ def create_update_event(event: EventsIn, id=None):
     return res_obj
 
 
-def create_update_selection(event: Selections, id=None):
+def create_update_selection(selection: Selections, id=None):
     if id == None:
-        statement, values = generate_insert_sql(event)
+        statement, values = generate_insert_sql(selection)
     else:
-        statement, values = generate_update_sql(event, id)
+        statement, values = generate_update_sql(selection, id)
     cur.execute(statement, values)
     res_obj = dict(cur.fetchone())
     return res_obj
