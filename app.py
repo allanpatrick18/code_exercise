@@ -1,6 +1,6 @@
 import uvicorn
-from create_tables import main
-main()
+# from create_tables import main
+# main()
 from typing import List
 from fastapi.encoders import jsonable_encoder
 from fastapi import FastAPI, Request
@@ -146,8 +146,6 @@ async def create_selections(item: model.Selections):
     selection = model.Selections.parse_obj(update_item_encoded)
     selection = create_update_selection(selection)
     return selection
-
-
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -120,6 +120,5 @@ map_queries = {'sports':  {'regex': select_by_regex,
 
 create_table_queries = [sports_table_create, event_table_create, selection_table_create, create_procedures,
                         create_triggers]
-# drop_table_queries = [sport_table_drop, events_table_drop, selection_table_drop]
+drop_table_queries = [sport_table_drop, events_table_drop, selection_table_drop]
 
-drop_table_queries = []
